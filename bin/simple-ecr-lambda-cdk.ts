@@ -2,7 +2,11 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { SimpleEcrLambdaCdkStack } from '../lib/simple-ecr-lambda-cdk-stack';
+import { SimplerEcrLambdaCdkStack } from "../lib/simple-ecr-lambda-cdk-stack-simpler";
+import * as dotenv from 'dotenv';
 
+// setup environment variables
+dotenv.config();
 const app = new cdk.App();
 new SimpleEcrLambdaCdkStack(app, 'SimpleEcrLambdaCdkStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
@@ -15,7 +19,13 @@ new SimpleEcrLambdaCdkStack(app, 'SimpleEcrLambdaCdkStack', {
 
   /* Uncomment the next line if you know exactly what Account and Region you
    * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
+  env: { account: process.env.AWS_ACCOUNT, region: process.env.AWS_REGION },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+new SimplerEcrLambdaCdkStack(app, "SimplerEcrLambdaCdkStack", {
+  env: { account: process.env.AWS_ACCOUNT, region: process.env.AWS_REGION },
+});
+
+app.synth();
